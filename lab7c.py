@@ -2,6 +2,7 @@
 
 
 
+
 class Time:
 
     """Simple object type for time of the day.
@@ -30,41 +31,49 @@ def format_time(t):
 
 
 
-def sum_times(t1, t2):
+def time_to_sec(time):
 
-    """Add two time objects and return the sum."""
+    '''convert a time object to a single integer representing the number of seconds from mid-night'''
 
-    sum = Time(0, 0, 0)
+    minutes = time.hour * 60 + time.minute
 
-    sum.hour = t1.hour + t2.hour
+    seconds = minutes * 60 + time.second
 
-    sum.minute = t1.minute + t2.minute
-
-    sum.second = t1.second + t2.second
+    return seconds
 
 
 
-    # Carry over seconds to minutes
+def sec_to_time(seconds):   
 
-    if sum.second >= 60:
+    '''convert a given number of seconds to a time object in hour,minute,second format'''
 
-        sum.minute += sum.second // 60
+    time = Time()
 
-        sum.second %= 60
+    minutes, time.second = divmod(seconds, 60)
+
+    time.hour, time.minute = divmod(minutes, 60)
+
+    return time
+
+def sum_times(time1, time2):
+
+    sec1 = time_to_sec(time1)
+
+    sec2 = time_to_sec(time2)
+
+    total_seconds = sec1 + sec2
+
+    return sec_to_time(total_seconds)
 
 
 
-    # Carry over minutes to hours
+def change_time(time, seconds):
 
-    if sum.minute >= 60:
+    total_seconds = time_to_sec(time) + seconds
 
-        sum.hour += sum.minute // 60
-
-        sum.minute %= 60
+    return sec_to_time(total_seconds)
 
 
-
-    return sum
 
 
 
@@ -83,5 +92,6 @@ def valid_time(t):
         return False
 
     return True
+
 
 

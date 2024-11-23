@@ -2,6 +2,7 @@
 
 
 
+
 class Time:
 
     """Simple object type for time of the day.
@@ -30,41 +31,48 @@ def format_time(t):
 
 
 
-def sum_times(t1, t2):
+def change_time(time, seconds):
 
-    """Add two time objects and return the sum."""
+    time.second += seconds
 
-    sum = Time(0, 0, 0)
+    # Ensure seconds are valid
 
-    sum.hour = t1.hour + t2.hour
+    while time.second >= 60:
 
-    sum.minute = t1.minute + t2.minute
+        time.second -= 60
 
-    sum.second = t1.second + t2.second
+        time.minute += 1
 
+    while time.minute >= 60:
 
+        time.minute -= 60
 
-    # Carry over seconds to minutes
-
-    if sum.second >= 60:
-
-        sum.minute += sum.second // 60
-
-        sum.second %= 60
+        time.hour += 1
 
 
 
-    # Carry over minutes to hours
+    # Handle negative seconds
 
-    if sum.minute >= 60:
+    while time.second < 0:
 
-        sum.hour += sum.minute // 60
+        time.second += 60
 
-        sum.minute %= 60
+        time.minute -= 1
+
+    while time.minute < 0:
+
+        time.minute += 60
+
+        time.hour -= 1
 
 
 
-    return sum
+    # Ensure hour stays within valid range
+
+    time.hour %= 24
+
+    return None
+
 
 
 
